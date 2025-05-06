@@ -1,0 +1,9 @@
+pip
+torch
+TensorFlow
+streamlit
+transformers
+tf-keras
+fastapi
+uvicorn
+pydantic
