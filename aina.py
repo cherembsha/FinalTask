@@ -44,3 +44,41 @@ def Em_T(to_api=False):
 
 if __name__ == "__main__":
     Em_T()
+
+# Работа с API
+
+
+class Item(BaseModel):
+    text: str
+
+
+app = FastAPI()
+
+
+@app.get('/')
+def root():
+    return 'Я умею читать настроение по тексту'
+
+
+@app.get('/how/')
+def how():
+    acc = Em_T_accuracy("Hello world!")
+
+    return 'Например, я считаю, что фраза "Hello world!" позитивна на ' + str(acc) + '%'
+
+
+@app.post('/predict/')
+async def predict(data=Body()):
+    text = data['text']
+
+    acc = Em_T_accuracy(text)
+    label = Em_T_label(text)
+
+    if label == 'negative':
+        label = 'ПЛОХОЕ'
+    elif label == 'positive':
+        label = 'ХОРОШЕЕ'
+    else:
+        label = 'НЕЙТРАЛЬНОЕ'
+
+    return {'message': f'Я уверена на {acc}%, что у вас {label} настроение'}
